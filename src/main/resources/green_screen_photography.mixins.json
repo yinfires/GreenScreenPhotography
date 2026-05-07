@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "package": "com.yinfires.greenscreenphotography.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "client": [
+    "GameRendererMixin",
+    "GuiMixin",
+    "KeyboardHandlerMixin",
+    "LocalPlayerMixin",
+    "LevelRendererMixin",
+    "MinecraftMixin",
+    "MinecraftInteractionMixin",
+    "MouseHandlerMixin",
+    "WalkAnimationStateAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

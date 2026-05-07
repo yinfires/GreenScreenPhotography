@@ -13,11 +13,11 @@ modId="${mod_id}" #mandatory
 version="${mod_version}" #mandatory
 displayName="${mod_name}" #mandatory
 description='''
-Green Screen is a NeoForge mod for Minecraft 1.21.1.
+GreenScreenPhotography is a Minecraft creative capture mod with green screen blocks, free camera, world freezing, and transparent screenshot export.
 '''
 
 [[mixins]]
-    config="greenscreen.mixins.json"
+    config="green_screen_photography.mixins.json"
 
 [[dependencies.${mod_id}]]
     modId="neoforge"

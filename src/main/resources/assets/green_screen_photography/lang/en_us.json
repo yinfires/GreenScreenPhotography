@@ -1,0 +1,15 @@
+{
+  "mod.green_screen_photography": "GreenScreenPhotography",
+  "block.green_screen_photography.green_screen_block": "Green Screen Block",
+  "itemGroup.green_screen_photography.green_screen": "GreenScreenPhotography",
+  "key.categories.green_screen_photography": "GreenScreenPhotography",
+  "key.green_screen_photography.free_camera": "Free camera",
+  "key.green_screen_photography.camera_freeze": "Freeze camera world",
+  "key.green_screen_photography.transparent_screenshot": "Export transparent screenshot",
+  "message.green_screen_photography.free_camera.entered": "Free camera enabled",
+  "message.green_screen_photography.free_camera.exited": "Free camera disabled",
+  "message.green_screen_photography.world.frozen": "World frozen",
+  "message.green_screen_photography.world.running": "World running",
+  "message.green_screen_photography.screenshot.saved": "Exported %s and %s",
+  "message.green_screen_photography.screenshot.failed": "Failed to export GreenScreenPhotography screenshot"
+}
