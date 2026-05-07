@@ -1,0 +1,15 @@
+{
+  "mod.greenscreen": "绿幕",
+  "block.greenscreen.green_screen_block": "绿幕方块",
+  "itemGroup.greenscreen.green_screen": "绿幕",
+  "key.categories.greenscreen": "绿幕",
+  "key.greenscreen.free_camera": "自由相机",
+  "key.greenscreen.camera_freeze": "冻结相机世界",
+  "key.greenscreen.transparent_screenshot": "导出透明截图",
+  "message.greenscreen.free_camera.entered": "已进入自由相机",
+  "message.greenscreen.free_camera.exited": "已退出自由相机",
+  "message.greenscreen.world.frozen": "世界已冻结",
+  "message.greenscreen.world.running": "世界已恢复流动",
+  "message.greenscreen.screenshot.saved": "已导出 %s 和 %s",
+  "message.greenscreen.screenshot.failed": "绿幕截图导出失败"
+}
