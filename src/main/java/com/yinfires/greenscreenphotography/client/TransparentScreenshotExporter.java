@@ -18,8 +18,7 @@ public final class TransparentScreenshotExporter {
     private static final int BLACK_SCREEN_COLOR = 0x000000;
     private static final int WHITE_SCREEN_COLOR = 0xFFFFFF;
     private static final int FULL_ALPHA = 0xFF;
-    private static final int GREEN_RESIDUE_MIN = 96;
-    private static final int GREEN_RESIDUE_DOMINANCE = 48;
+    private static final int SCREEN_COLOR_TOLERANCE = 8;
 
     private static CaptureState captureState = CaptureState.IDLE;
     private static NativeImage blackSample;
@@ -117,23 +116,12 @@ public final class TransparentScreenshotExporter {
                 int whiteGreen = green(whitePixel);
                 int whiteBlue = blue(whitePixel);
 
-                int alpha = reconstructedAlpha(blackRed, blackGreen, blackBlue, whiteRed, whiteGreen, whiteBlue);
-                int red = unpremultiply(blackRed, alpha);
-                int green = unpremultiply(blackGreen, alpha);
-                int blue = unpremultiply(blackBlue, alpha);
-                if (isGreenScreenResidue(red, green, blue)) {
-                    int chromaAlpha = chromaAlpha(red, green, blue);
-                    alpha = Math.min(alpha, chromaAlpha);
-                    if (alpha <= 0) {
-                        red = 0;
-                        green = 0;
-                        blue = 0;
-                    } else {
-                        red = unpremultiply(red * alpha / FULL_ALPHA, alpha);
-                        green = Math.min(unpremultiply(green * alpha / FULL_ALPHA, alpha), Math.max(red, blue));
-                        blue = unpremultiply(blue * alpha / FULL_ALPHA, alpha);
-                    }
-                }
+                int reconstructionAlpha = reconstructedAlpha(blackRed, blackGreen, blackBlue, whiteRed, whiteGreen, whiteBlue);
+                boolean screenPixel = isScreenPixel(blackRed, blackGreen, blackBlue, whiteRed, whiteGreen, whiteBlue);
+                int alpha = screenPixel ? 0 : FULL_ALPHA;
+                int red = screenPixel ? 0 : unpremultiply(blackRed, reconstructionAlpha);
+                int green = screenPixel ? 0 : unpremultiply(blackGreen, reconstructionAlpha);
+                int blue = screenPixel ? 0 : unpremultiply(blackBlue, reconstructionAlpha);
 
                 transparent.setPixelRGBA(x, y, packRgba(red, green, blue, alpha));
                 matte.setPixelRGBA(x, y, packRgba(alpha, alpha, alpha, FULL_ALPHA));
@@ -148,13 +136,18 @@ public final class TransparentScreenshotExporter {
         return clamp((redAlpha + greenAlpha + blueAlpha) / 3);
     }
 
-    private static boolean isGreenScreenResidue(int red, int green, int blue) {
-        return green >= GREEN_RESIDUE_MIN && green - Math.max(red, blue) >= GREEN_RESIDUE_DOMINANCE;
+    private static boolean isScreenPixel(int blackRed, int blackGreen, int blackBlue, int whiteRed, int whiteGreen, int whiteBlue) {
+        return isNearColor(blackRed, blackGreen, blackBlue, BLACK_SCREEN_COLOR)
+                && isNearColor(whiteRed, whiteGreen, whiteBlue, WHITE_SCREEN_COLOR);
     }
 
-    private static int chromaAlpha(int red, int green, int blue) {
-        int greenDominance = green - Math.max(red, blue);
-        return clamp(FULL_ALPHA - greenDominance);
+    private static boolean isNearColor(int red, int green, int blue, int color) {
+        int targetRed = color >> 16 & 0xFF;
+        int targetGreen = color >> 8 & 0xFF;
+        int targetBlue = color & 0xFF;
+        return Math.abs(red - targetRed) <= SCREEN_COLOR_TOLERANCE
+                && Math.abs(green - targetGreen) <= SCREEN_COLOR_TOLERANCE
+                && Math.abs(blue - targetBlue) <= SCREEN_COLOR_TOLERANCE;
     }
 
     private static int unpremultiply(int premultipliedChannel, int alpha) {
